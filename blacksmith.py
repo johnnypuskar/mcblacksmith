@@ -116,6 +116,8 @@ class Item:
                         multiplier = ench.itemMultiplier
                     if ench.name not in self.enchantments:
                         totalCost += other.enchantments[ench.name] * multiplier
+                    elif self.enchantments[ench.name] == enchantments[ench.name].maxLevel:
+                        totalCost += self.enchantments[ench.name] * multiplier
                     elif other.enchantments[ench.name] == self.enchantments[ench.name]:
                         totalCost += (self.enchantments[ench.name] + 1) * multiplier
                     else:
@@ -129,7 +131,7 @@ class Item:
     def combine(self, other):
         pass
 
-    def equals(self, other)
+    def equals(self, other):
         if len(self.enchantments) != len(other.enchantments):
             return False
         for ench in other.enchantments:
@@ -216,8 +218,10 @@ class Book(Item):
             self.addLegalEnchantment(ench)
 
 first = Sword()
-first.enchant("Sharpness", 1)
-first.enchant("Looting", 3)
+first.enchant("Sharpness", 3)
+first.enchant("Fire Aspect", 1)
+first.enchant("Looting", 2)
+first.enchant("Mending", 1)
 
 second = Sword()
 second.enchant("Sharpness", 3)
@@ -225,3 +229,13 @@ second.enchant("Knockback", 2)
 second.enchant("Looting", 1)
 
 print(second.getOptimalCost(first))
+
+third = Tool()
+third.enchant("Efficiency", 5)
+third.enchant("Unbreaking", 1)
+
+fourth = Tool()
+fourth.enchant("Efficiency", 5)
+fourth.enchant("Silk Touch", 1)
+
+print(third.getCombineCost(fourth))
