@@ -1,4 +1,4 @@
-
+import copy
 
 class Enchantment:
     def __init__(self, name, maxLevel, im, bm):
@@ -125,11 +125,29 @@ class Item:
                         
                 else:
                     totalCost += 1
+        totalCost += (2**self.priorWorks-1) + (2**other.priorWorks-1)
         return totalCost
             
     
     def combine(self, other):
-        pass
+        result = copy.deepcopy(self)
+        for enchName in other.enchantments:
+            ench = enchantments[enchName]
+            if ench.name in self.enchantments:
+                if self.enchantments[ench.name] < other.enchantments[ench.name]:
+                    result.enchantments[ench.name] = other.enchantments[ench.name]
+                elif self.enchantments[ench.name] == other.enchantments[ench.name]:
+                    result.enchantments[ench.name] += 1
+            elif ench.name in self.legalEnchantments:
+                hasConflicting = False
+                for incompatible in ench.incompatible:
+                    if incompatible.name in self.enchantments:
+                        hasConflicting = True
+                        break
+                if not hasConflicting:
+                    result.enchantments[ench.name] = other.enchantments[ench.name]
+        result.priorWorks = max(self.priorWorks, other.priorWorks) + 1
+        return result
 
     def equals(self, other):
         if len(self.enchantments) != len(other.enchantments):
@@ -138,6 +156,15 @@ class Item:
             if ench not in self.enchantments:
                 return False
         return True
+
+    def __str__(self):
+        toReturn = type(self).__name__ + "\n"
+        for ench in self.enchantments.keys():
+            toReturn += ench
+            if self.enchantments[ench] > 1:
+                toReturn += " " + str(self.enchantments[ench])
+            toReturn += "\n"
+        return toReturn
 
 class Armor(Item):
     def defineEnchantments(self):
