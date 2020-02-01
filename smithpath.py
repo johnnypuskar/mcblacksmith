@@ -15,12 +15,6 @@ def addItemToNodeList(nodes, first, second):
     
 
 def lowestCombination(nodes):
-    
-    for node in nodes:
-        for otherNode in nodes:
-            if node != otherNode:
-                ab = node.item.combine(otherNode.item)
-                ba = otherNode.item.combine(otherNode.item)
                 
 
 def findPath(nodes, goal):
