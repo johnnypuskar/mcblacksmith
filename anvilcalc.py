@@ -128,6 +128,23 @@ class Item:
         totalCost += (2**self.priorWorks-1) + (2**other.priorWorks-1)
         return totalCost
             
+    def orderMatters(self, other):
+        for enchName in self.enchantments:
+            ench = enchantments[enchName]
+            for incompatible in ench.incompatible:
+                if incompatible.name in other.enchantments:
+                    return True
+        return False
+
+    def combinable(self, other):
+        for ench in other.enchantments:
+            if ench not in self.legalEnchantments:
+                return False
+            for incompatible in enchantments[ench].incompatible:
+                if incompatible.name in self.enchantments:
+                    return False
+        return True
+            
     
     def combine(self, other):
         result = copy.deepcopy(self)
@@ -188,12 +205,24 @@ class Boots(Armor):
         self.addLegalEnchantment("Feather Falling")
         self.addLegalEnchantment("Depth Strider")
 
+class Chestplate(Armor):
+    pass
+
+class Leggings(Armor):
+    pass
+
 class Tool(Item):
     def defineEnchantments(self):
         Item.defineEnchantments(self)
         self.addLegalEnchantment("Efficiency")
         self.addLegalEnchantment("Silk Touch")
         self.addLegalEnchantment("Fortune")
+
+class Pickaxe(Tool):
+    pass
+
+class Shovel(Tool):
+    pass
 
 class Weapon(Item):
     def defineEnchantments(self):
