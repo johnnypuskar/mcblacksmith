@@ -42,7 +42,7 @@ enchantments["Frost Walker"] = Enchantment("Frost Walker", 2, 4, 2)
 enchantments["Mending"] = Enchantment("Mending", 1, 4, 2)
 enchantments["Curse of Binding"] = Enchantment("Curse of Binding", 1, 8, 4)
 enchantments["Curse of Vanishing"] = Enchantment("Curse of Vanishing", 1, 8, 4)
-enchantments["Sweeping Edge"] = Enchantment("Sweepign Edge", 3, 4, 2)
+enchantments["Sweeping Edge"] = Enchantment("Sweeping Edge", 3, 4, 2)
 
 enchantments["Protection"].makeIncompatible(enchantments["Fire Protection"])
 enchantments["Protection"].makeIncompatible(enchantments["Blast Protection"])
@@ -80,7 +80,7 @@ class Item:
         self.addLegalEnchantment("Unbreaking")
         self.addLegalEnchantment("Curse of Vanishing")
 
-    def enchant(self, name, level):
+    def enchant(self, name, level = 1):
         self.enchantments[name] = level
 
     def disenchant(self, name = None):
@@ -137,13 +137,16 @@ class Item:
         return False
 
     def combinable(self, other):
+        if isinstance(self, Book) and not isinstance(other, Book):
+            return False
         for ench in other.enchantments:
-            if ench not in self.legalEnchantments:
-                return False
-            for incompatible in enchantments[ench].incompatible:
-                if incompatible.name in self.enchantments:
-                    return False
-        return True
+            if ench in self.legalEnchantments:
+                hasIncompatibility = False
+                for incompatible in enchantments[ench].incompatible:
+                    if incompatible.name in self.enchantments:
+                        hasIncompatibility = True
+                if not hasIncompatibility:
+                    return self.getCombineCost(other) < 40
             
     
     def combine(self, other):
@@ -166,22 +169,36 @@ class Item:
         result.priorWorks = max(self.priorWorks, other.priorWorks) + 1
         return result
 
+    def enchantmentString(self):
+        enchList = [(k, v) for k, v in self.enchantments.items()]
+        enchList.sort(key = lambda i: (i[0], i[1]))
+        toReturn = ""
+        for e in enchList:
+            toReturn += e[0] + str(e[1])
+        return toReturn
+        
+    
     def equals(self, other):
-        if len(self.enchantments) != len(other.enchantments):
+        if len(self.enchantments) != len(other.enchantments) or type(self) is not type(other):
             return False
         for ench in other.enchantments:
             if ench not in self.enchantments:
                 return False
+            elif self.enchantments[ench] != other.enchantments[ench]:
+                return False
         return True
 
     def __str__(self):
-        toReturn = type(self).__name__ + "\n"
+        if len(self.enchantments.keys()) == 0:
+            return type(self).__name__.upper()
+        toReturn = type(self).__name__ + "{"
         for ench in self.enchantments.keys():
             toReturn += ench
             if self.enchantments[ench] > 1:
                 toReturn += " " + str(self.enchantments[ench])
-            toReturn += "\n"
-        return toReturn
+            toReturn += ", "
+        return (toReturn[:-2] + "}").upper()
+        
 
 class Armor(Item):
     def defineEnchantments(self):
@@ -272,3 +289,4 @@ class Book(Item):
     def defineEnchantments(self):
         for ench in enchantments.keys():
             self.addLegalEnchantment(ench)
+
