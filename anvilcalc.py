@@ -43,6 +43,14 @@ enchantments["Mending"] = Enchantment("Mending", 1, 4, 2)
 enchantments["Curse of Binding"] = Enchantment("Curse of Binding", 1, 8, 4)
 enchantments["Curse of Vanishing"] = Enchantment("Curse of Vanishing", 1, 8, 4)
 enchantments["Sweeping Edge"] = Enchantment("Sweeping Edge", 3, 4, 2)
+enchantments["Impaling"] = Enchantment("Impaling", 5, 3, 2)
+enchantments["Riptide"] = Enchantment("Riptide", 3, 4, 2)
+enchantments["Loyalty"] = Enchantment("Loyalty", 3, 1, 1)
+enchantments["Channeling"] = Enchantment("Channelling", 1, 8, 4)
+enchantments["Multishot"] = Enchantment("Multishot", 1, 4, 2)
+enchantments["Piercing"] = Enchantment("Piercing", 4, 1, 1)
+enchantments["Quick Charge"] = Enchantment("Quick Charge", 3, 2, 1)
+enchantments["Soul Speed"] = Enchantment("Soul Speed", 3, 4, 2)
 
 enchantments["Protection"].makeIncompatible(enchantments["Fire Protection"])
 enchantments["Protection"].makeIncompatible(enchantments["Blast Protection"])
@@ -60,6 +68,13 @@ enchantments["Smite"].makeIncompatible(enchantments["Bane of Arthropods"])
 enchantments["Depth Strider"].makeIncompatible(enchantments["Frost Walker"])
 
 enchantments["Infinity"].makeIncompatible(enchantments["Mending"])
+
+enchantments["Riptide"].makeIncompatible(enchantments["Loyalty"])
+enchantments["Riptide"].makeIncompatible(enchantments["Channeling"])
+enchantments["Loyalty"].makeIncompatible(enchantments["Channeling"])
+
+enchantments["Multishot"].makeIncompatible(enchantments["Piercing"])
+
 
 class Item:
     def __init__(self, priorWorks = 0, damaged = False, priorEnchantments = []):
@@ -221,6 +236,7 @@ class Boots(Armor):
         Armor.defineEnchantments(self)
         self.addLegalEnchantment("Feather Falling")
         self.addLegalEnchantment("Depth Strider")
+        self.addLegalEnchantment("Soul Speed")
 
 class Chestplate(Armor):
     pass
@@ -256,6 +272,14 @@ class Sword(Weapon):
         self.addLegalEnchantment("Knockback")
         self.addLegalEnchantment("Sweeping Edge")
 
+class Trident(Item):
+    def defineEnchantments(self):
+        Item.defineEnchantments(self)
+        self.addLegalEnchantment("Impaling")
+        self.addLegalEnchantment("Channeling")
+        self.addLegalEnchantment("Loyalty")
+        self.addLegalEnchantment("Riptide")
+
 class Bow(Item):
     def defineEnchantments(self):
         Item.defineEnchantments(self)
@@ -264,6 +288,13 @@ class Bow(Item):
         self.addLegalEnchantment("Flame")
         self.addLegalEnchantment("Infinity")
 
+class Crossbow(Item):
+    def defineEnchantments(self):
+        Item.defineEnchantments(self)
+        self.addLegalEnchantment("Quick Charge")
+        self.addLegalEnchantment("Piercing")
+        self.addLegalEnchantment("Multishot")
+
 class FishingRod(Item):
     def defineEnchantments(self):
         Item.defineEnchantments(self)
@@ -271,12 +302,12 @@ class FishingRod(Item):
         self.addLegalEnchantment("Luck of the Sea")
 
 class Axe(Tool, Weapon):
-    def defineEnchantments():
+    def defineEnchantments(self):
         Tool.defineEnchantments(self)
         Weapon.defineEnchantments(self)
 
 class Shears(Item):
-    def defineEnchantments():
+    def defineEnchantments(self):
         Item.defineEnchantments(self)
         self.addLegalEnchantment("Efficiency")
 

@@ -130,40 +130,29 @@ def printList(l):
     for i in l:
         print(i)
 
-a = Sword()
+def enchantedBook(enchantment, level):
+    a = Book()
+    a.enchant(enchantment, level)
+    return a
 
-b = Book()
-b.enchant("Sharpness",4)
+a = Axe()
 
-c = Book()
-c.enchant("Sharpness",4)
+#l = [Boots(), enchantedBook("Protection", 4), enchantedBook("Depth Strider", 3), enchantedBook("Feather Falling", 4), enchantedBook("Soul Speed", 3), enchantedBook("Mending", 1), enchantedBook("Unbreaking", 3)]
 
-d = Book()
-d.enchant("Fire Aspect",2)
+#final = Boots()
+#final.enchant("Protection",4)
+#final.enchant("Depth Strider",3)
+#final.enchant("Feather Falling",4)
+#final.enchant("Soul Speed", 3)
+#final.enchant("Mending")
+#final.enchant("Unbreaking",3)
+#b,n,c = findPath(l,final)
 
-e = Book()
-e.enchant("Looting",3)
+#print(b, n, c)
 
-f = Book()
-f.enchant("Mending")
+#cp = n.getCreationPath()
 
-g = Book()
-g.enchant("Unbreaking",3)
+#for pair in cp:
+#    print("> Step:\n" + str(pair[0]) + "\n" + str(pair[1]) + "\n")
 
-l = [a, b, c, d, e, f, g]
-
-final = Sword()
-final.enchant("Sharpness",5)
-final.enchant("Fire Aspect",2)
-final.enchant("Looting",3)
-final.enchant("Mending")
-final.enchant("Unbreaking",3)
-
-b,n,c = findPath(l,final)
-
-cp = n.getCreationPath()
-
-for pair in cp:
-    print("> Step:\n" + str(pair[0]) + "\n" + str(pair[1]) + "\n")
-
-print("Final Item: " + str(final) + "\nFinal Cost:",c)
+#print("Final Item: " + str(final) + "\nFinal Cost:",c)
